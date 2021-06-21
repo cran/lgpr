@@ -1,0 +1,17 @@
+citHeader("If you use lgpr, please cite the article below.")
+
+citEntry(entry = "article",
+  title        = "lgpr: an interpretable non-parametric method for inferring covariate effects from longitudinal data",
+  author       = personList(as.person("Juho Timonen"),
+                   as.person("Henrik Mannerström"),
+                   as.person("Aki Vehtari"),
+                   as.person("Harri Lähdesmäki")),
+  journal       = "Bioinformatics",
+  year          = "2021",
+  url           = "https://doi.org/10.1093/bioinformatics/btab021",
+  textVersion  =
+  paste("Juho Timonen, Henrik Mannerström, Aki Vehtari and Harri Lähdesmäki,",
+        "lgpr: an interpretable non-parametric method for inferring covariate effects from longitudinal data.",
+        "Bioinformatics, 2021;",
+        "https://doi.org/10.1093/bioinformatics/btab021")
+)
