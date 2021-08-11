@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Juho Timonen" />
+
+
+<title>Mathematical description of lgpr models</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Mathematical description of lgpr models</h1>
+<h4 class="author">Juho Timonen</h4>
+<h4 class="date">11th August 2021</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#bayesian-gp-regression">1. Bayesian GP regression</a></li>
+<li><a href="#connection-between-lgpr-arguments-and-different-model-parts">2. Connection between lgpr arguments and different model parts</a></li>
+<li><a href="#the-likelihood-argument-and-observation-models">3. The <code>likelihood</code> argument and observation models</a></li>
+<li><a href="#the-formula-argument-and-kernel-functions">4. The <code>formula</code> argument and kernel functions</a>
+<ul>
+<li><a href="#additive-gp-regression">Additive GP regression</a></li>
+<li><a href="#formulas-and-terms">Formulas and terms</a></li>
+<li><a href="#expressions-and-kernels">Expressions and kernels</a></li>
+<li><a href="#masking-missing-covariates">Masking missing covariates</a></li>
+<li><a href="#heterogeneous-effects-and-covariate-uncertainty">Heterogeneous effects and covariate uncertainty</a></li>
+</ul></li>
+<li><a href="#model-inference">5. Model inference</a>
+<ul>
+<li><a href="#with-sample_f-true">With sample_f = TRUE</a></li>
+<li><a href="#with-sample_f-false">With sample_f = FALSE</a></li>
+</ul></li>
+<li><a href="#references">References</a></li>
+</ul>
+</div>
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lgpr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Attached lgpr 1.1.4, using rstan 2.21.2. Type ?lgpr to get started.</span></span></code></pre></div>
+<p>This vignette describes mathematically the statistical models of <code>lgpr</code>. We study the different arguments of the <code>lgp()</code> or <code>create_model()</code> modeling functions and what parts of the probabilistic model they customize. This is a concise description, and the original publication (<span class="citation">Timonen et al. (2021)</span>) has more information about the actual motivation for the used modeling approaches, and the <a href="https://jtimonen.github.io/lgpr-usage/">tutorials</a> have code examples.</p>
+<div id="bayesian-gp-regression" class="section level2">
+<h2>1. Bayesian GP regression</h2>
+<p>The models in <code>lgpr</code> are models for the conditional distribution <span class="math display">\[
+p(y \mid f(\textbf{x}), \theta_{\text{obs}}),
+\]</span> of response variable <span class="math inline">\(y\)</span> given covariates <span class="math inline">\(\textbf{x}\)</span>, where <span class="math inline">\(\theta_{\text{obs}}\)</span> is a possible parameter of the observation model (like the magnitude of observation noise). The function <span class="math inline">\(f\)</span> has a Gaussian Process (GP) prior <span class="math display">\[
+f \sim \mathcal{GP}(0, k\left(\textbf{x}, \textbf{x}&#39; \mid \theta_{\text{GP}})\right),
+\]</span></p>
+<p>with covariance (kernel) function <span class="math inline">\(k(\textbf{x}, \textbf{x}&#39; \mid \theta_{\text{GP}})\)</span> that has hyperparameters <span class="math inline">\(\theta_{\text{GP}}\)</span>. In addition to the GP prior for <span class="math inline">\(f\)</span>, there is a parameter prior distribution <span class="math inline">\(p(\theta)\)</span> for <span class="math inline">\(\theta = \left\{ \theta_{\text{GP}}, \theta_{\text{obs}} \right\}\)</span>. Given <span class="math inline">\(N\)</span> observations <span class="math inline">\(\mathcal{D} = \{y_n, \textbf{x}_n\}_{n=1}^N\)</span> the probabilistic models in <code>lgpr</code> have the form <span class="math display">\[\begin{align}
+p\left(\theta, \textbf{f}\right) &amp;= p\left(\textbf{f} \mid \theta\right) \cdot p(\theta) &amp; \text{(prior)} \\
+p(\textbf{y} \mid \textbf{f}, \theta) &amp;= \prod_{n=1}^N p(y_n \mid f(\textbf{x}_n), \theta_{\text{obs}}) &amp; \text{(likelihood)},
+\end{align}\]</span> where <span class="math inline">\(\textbf{f} = \left[ f(\textbf{x}_1), \ldots, f(\textbf{x}_N) \right]^{\top}\)</span>, <span class="math inline">\(\textbf{y} = \left[y_1, \ldots, y_N\right]^{\top}\)</span>. The parameter prior density <span class="math inline">\(p(\theta)\)</span> is the product of the prior densities of each parameter, and the GP prior means that the prior for <span class="math inline">\(\textbf{f}\)</span> is the multivariate normal <span class="math display">\[\begin{equation}
+p\left(\textbf{f} \mid \theta\right) = \mathcal{N}\left(\textbf{f} \mid \textbf{0}, \textbf{K} \right),
+ \end{equation}\]</span> where the <span class="math inline">\(N \times N\)</span> matrix <span class="math inline">\(\textbf{K}\)</span> has entries <span class="math inline">\(\{ \textbf{K} \}_{in} = k(\textbf{x}_i, \textbf{x}_n \mid \theta_{\text{GP}})\)</span>.</p>
+</div>
+<div id="connection-between-lgpr-arguments-and-different-model-parts" class="section level2">
+<h2>2. Connection between lgpr arguments and different model parts</h2>
+<p>The below table shows which parts of the above mathematical description are affected by which arguments to <code>lgp()</code> or <code>create_model()</code>. You can read more about them in the documentation of said functions.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Affected model part</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>formula</code></td>
+<td><span class="math inline">\(k(\textbf{x}, \textbf{x}&#39;)\)</span></td>
+</tr>
+<tr class="even">
+<td><code>data</code></td>
+<td><span class="math inline">\(\mathcal{D}\)</span></td>
+</tr>
+<tr class="odd">
+<td><code>likelihood</code></td>
+<td><span class="math inline">\(p(y_n \mid f(\textbf{x}_n), \theta_{\text{obs}})\)</span></td>
+</tr>
+<tr class="even">
+<td><code>prior</code></td>
+<td><span class="math inline">\(p(\theta)\)</span></td>
+</tr>
+<tr class="odd">
+<td><code>c_hat</code></td>
+<td><span class="math inline">\(p(y_n \mid f(\textbf{x}_n), \theta_{\text{obs}})\)</span></td>
+</tr>
+<tr class="even">
+<td><code>num_trials</code></td>
+<td><span class="math inline">\(\mathcal{D}\)</span></td>
+</tr>
+<tr class="odd">
+<td><code>options</code></td>
+<td><span class="math inline">\(k(\textbf{x}, \textbf{x}&#39;)\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="the-likelihood-argument-and-observation-models" class="section level2">
+<h2>3. The <code>likelihood</code> argument and observation models</h2>
+<p>The terms <strong>observation model</strong> and <strong>likelihood</strong> are used to refer to the same formula, i.e. <span class="math inline">\(p(y_n \mid f(\textbf{x}_n), \theta_{\text{obs}})\)</span>, though the former means it as a function of <span class="math inline">\(\textbf{y}\)</span> and the latter as a function of <span class="math inline">\(\theta\)</span>. There are currently five observation models available and they all involve an inverse link function transformation <span class="math display">\[
+h_n = g^{-1}\left(  f(\textbf{x}_n)+ \hat{c}_n \right)
+\]</span> where <span class="math inline">\(g\)</span> is determined by the <code>likelihood</code> argument and <span class="math inline">\(\hat{c}_n\)</span> by the <code>c_hat</code> argument. The below table shows what the link function is in different cases, and what parameter the corresponding observation model has.</p>
+<table>
+<thead>
+<tr class="header">
+<th><code>likelihood</code></th>
+<th>Link function <span class="math inline">\(g\)</span></th>
+<th>Parameter <span class="math inline">\(\theta_{\text{obs}}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>gaussian</code></td>
+<td>identity</td>
+<td><span class="math inline">\(\sigma\)</span></td>
+</tr>
+<tr class="even">
+<td><code>poisson</code></td>
+<td>logarithm</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td><code>nb</code></td>
+<td>logarithm</td>
+<td><span class="math inline">\(\phi\)</span></td>
+</tr>
+<tr class="even">
+<td><code>binomial</code></td>
+<td>logit</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td><code>bb</code></td>
+<td>logit</td>
+<td><span class="math inline">\(\gamma\)</span></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>In the <strong>Gaussian</strong> observation model (<code>likelihood=&quot;gaussian&quot;</code>), <span class="math display">\[
+p(y_n \mid f(\textbf{x}_n), \theta_{\text{obs}}) = \mathcal{N}(y_n \mid h_n, \sigma^2)
+\]</span> <span class="math inline">\(\theta_{\text{obs}}=\sigma\)</span> is a noise magnitude parameter.</p></li>
+<li><p>The <strong>Poisson</strong> observation model (<code>likelihood=&quot;poisson&quot;</code>) for count data is <span class="math display">\[
+y_n \sim \text{Poisson}\left(\lambda_n \right),
+\]</span> where the rate is <span class="math inline">\(\lambda_n = h_n\)</span>.</p></li>
+<li><p>In the <strong>negative binomial</strong> (<code>likelihood=&quot;nb&quot;</code>) model, <span class="math inline">\(\lambda_n\)</span> is gamma-distributed with parameters <span class="math display">\[
+\begin{cases}
+\text{shape} &amp;= \phi \\
+\text{scale} &amp;= \frac{\phi}{h_n}
+\end{cases},
+\]</span> and <span class="math inline">\(\phi &gt; 0\)</span> controls overdispersion so that <span class="math inline">\(\phi \rightarrow \infty\)</span> corresponds to the Poisson model.</p></li>
+<li><p>When selecting the binomial or beta-binomial observation model for count data, the number of trials <span class="math inline">\(\eta_n\)</span>, for each <span class="math inline">\(n=1, \ldots, N\)</span> has to be supplied using the <code>num_trials</code> argument. The <strong>binomial</strong> model (<code>likelihood=&quot;binomial&quot;</code>) is <span class="math display">\[
+y_n \sim \text{Binomial}(h_n, \eta_n),
+\]</span> where the success probability <span class="math inline">\(\rho_n = h_n\)</span>.</p></li>
+<li><p>In the <strong>beta-binomial</strong> model (<code>likelihood=&quot;bb&quot;</code>), <span class="math inline">\(\rho_i\)</span> is random so that <span class="math display">\[
+\rho_n \sim \text{Beta}\left(h_n \cdot \frac{1 - \gamma}{\gamma}, \  (1-h_n) \cdot \frac{1 - \gamma}{\gamma}\right),
+\]</span> and the parameter <span class="math inline">\(\gamma \in [0, 1]\)</span> controls overdispersion so that <span class="math inline">\(\gamma \rightarrow 0\)</span> corresponds to the binomial model.</p></li>
+</ul>
+<p>When using the Gaussian observation model with <code>sample_f=TRUE</code> the continuous response <span class="math inline">\(y\)</span> is normalized to unit variance and zero mean, and <span class="math inline">\(\hat{c}_n = 0\)</span> for all <span class="math inline">\(n\)</span> is set. In this case the <code>c_hat</code> argument has no effect. With <code>sample_f = TRUE</code>, sensible defaults are used. See the documentation of the <code>c_hat</code> argument of <code>lgp()</code> for exact details and the <a href="#model-inference">5. Model inference</a> section for information about the <code>sample_f</code> argument.</p>
+</div>
+<div id="the-formula-argument-and-kernel-functions" class="section level2">
+<h2>4. The <code>formula</code> argument and kernel functions</h2>
+<div id="additive-gp-regression" class="section level3">
+<h3>Additive GP regression</h3>
+<p>The GP models of <code>lgpr</code> are additive, so that <span class="math display">\[\begin{equation}
+ k(\textbf{x}, \textbf{x}&#39; \mid \theta_{\text{GP}})  = \sum_{j=1}^J \alpha_j^2 k_j(\textbf{x}, \textbf{x}&#39; \mid \theta_{\text{GP}}).
+\end{equation}\]</span> This is equivalent to saying that we have <span class="math inline">\(f = f^{(1)} + \ldots + f^{(J)}\)</span> modeled so that each component <span class="math inline">\(j = 1, \ldots, J\)</span> has a GP prior <span class="math display">\[\begin{equation}
+f^{(j)} \sim \mathcal{GP}\left(0, \alpha_j^2 k_j(\textbf{x}, \textbf{x}&#39; \mid \theta_{\text{GP}}) \right),
+\end{equation}\]</span> independently from other components.</p>
+</div>
+<div id="formulas-and-terms" class="section level3">
+<h3>Formulas and terms</h3>
+<p>The number of components <span class="math inline">\(J\)</span> is equal to the number of terms in your <code>formula</code>. Terms are separated by a plus sign. An example formula with three terms could be</p>
+<pre><code>y ~ gp(age) + gp(age)*zs(id) + categ(group)</code></pre>
+<p>where <code>y</code>, <code>age</code>, <code>id</code> and <code>group</code> have to be columns of <code>data</code>. Each formula term defines what the corresponding kernel <span class="math inline">\(k_j\)</span> will be like, and what covariates and parameters it depends on. Each term adds one <span class="math inline">\(\alpha\)</span> parameter in the GP parameter vector <span class="math inline">\(\theta_{\text{GP}}\)</span>, and possible additional parameters depending on the term.</p>
+</div>
+<div id="expressions-and-kernels" class="section level3">
+<h3>Expressions and kernels</h3>
+<p>Each term is a product (separated by <code>*</code>) of what we call expressions. At this point we are not using standard R formula terminology because terms in <code>lgpr</code> are parsed in a custom way. Each expression corresponds to one kernel, and the kernel <span class="math inline">\(k_j\)</span> is the product of all the kernels in term <span class="math inline">\(j\)</span>. Inside parentheses, each expression must contain the name of one <code>data</code> variable, as in <code>gp(age)</code>. This determines what variable the kernel depends on. Most of the allowed expressions, their corresponding kernels, and allowed variable types are listed below.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Expression</th>
+<th>Corresponding kernel</th>
+<th>Allowed variable type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>gp()</code></td>
+<td>Exponentiated quadratic (EQ)</td>
+<td>Continuous</td>
+</tr>
+<tr class="even">
+<td><code>zs()</code></td>
+<td>Zero-sum (ZS)</td>
+<td>Categorical</td>
+</tr>
+<tr class="odd">
+<td><code>categ()</code></td>
+<td>Categorical (CAT)</td>
+<td>Categorical</td>
+</tr>
+<tr class="even">
+<td><code>gp_ns()</code></td>
+<td>Nonstationary (NS)</td>
+<td>Continuous</td>
+</tr>
+<tr class="odd">
+<td><code>gp_vm()</code></td>
+<td>Variance-mask (VM)</td>
+<td>Continuous</td>
+</tr>
+</tbody>
+</table>
+<p>Continuous covariates should be represented in <code>data</code> as <code>numeric</code> and categorical covariates as <code>factor</code>s. Equations for different kernels are listed here briefly. See <span class="citation">Timonen et al. (2021)</span> for more motivation and details about what kind of effects they can model alone and in combinations.</p>
+<ul>
+<li><p>The EQ kernel is <span class="math display">\[
+k_{\text{EQ}}(x,x&#39; \mid \theta_{\text{GP}}) = \exp \left( -\frac{(x-x&#39;)^2}{2 \ell^2}\right)
+\]</span> and it has the lengthscale parameter <span class="math inline">\(\ell\)</span>. Each EQ kernel adds one lengthscale parameter to <span class="math inline">\(\theta_{\text{GP}}\)</span>.</p></li>
+<li><p>The ZS kernel is <span class="math display">\[\begin{equation}
+  k_{\text{ZS}}(z, z&#39;) = 
+  \begin{cases} 1 \ \ \ \text{   if   } z = z&#39; \\
+  \frac{1}{1 - M} \ \ \ \text{   if   } z \neq z&#39;
+  \end{cases}
+\end{equation}\]</span> where <span class="math inline">\(M\)</span> is the number of different categories for covariate <span class="math inline">\(z\)</span>.</p></li>
+<li><p>The CAT kernel is <span class="math display">\[\begin{equation}
+  k_{\text{CAT}}(z, z&#39;) = 
+  \begin{cases} 1 \ \ \ \text{   if   } z = z&#39; \\
+  0 \ \ \ \text{   if   } z \neq z&#39;
+  \end{cases}
+\end{equation}\]</span></p></li>
+<li><p>The NS kernel is <span class="math display">\[\begin{equation}
+  k_{\text{NS}}(x, x&#39; \mid a, \ell) =  k_{\text{EQ}}(\omega_a(x), \omega_a(x&#39;) \mid \ell),
+\end{equation}\]</span> where <span class="math inline">\(\omega_a: \mathbb{R} \rightarrow ]-1,1[\)</span> is an input warping function <span class="math display">\[\begin{equation}
+  \omega_a(x) = 2 \cdot \left(\frac{1}{1 + e^{-a x}} - \frac{1}{2} \right),
+\end{equation}\]</span> Each NS kernel adds one lengthscale parameter <span class="math inline">\(\ell\)</span> and one warping steepness parameter <span class="math inline">\(a\)</span> to <span class="math inline">\(\theta_{\text{GP}}\)</span>.</p></li>
+<li><p>The VM kernel is <span class="math display">\[\begin{equation}
+  k_{\text{VM}}(x, x&#39; \mid a, \ell) = f^a_{\text{VM}}(x) \cdot  f^a_{\text{VM}}(x&#39;) \cdot k_{\text{NS}}(x, x&#39; \mid a, \ell), 
+\end{equation}\]</span> where <span class="math inline">\(f^a_{\text{VM}}(x) = \frac{1}{1 + e^{-a h_2 (x-r)}}\)</span> and <span class="math inline">\(r = \frac{1}{a} \text{logit}(h_1)\)</span>. The parameters <span class="math inline">\(h_1\)</span> and <span class="math inline">\(h_2\)</span> are determined by <code>opt$vm_params[1]</code> and <code>opt$vm_params[2]</code>, respectively, where <code>opt</code> is the <code>options</code> argument given to <code>lgp()</code>. Each VM kernel adds one lengthscale parameter <span class="math inline">\(\ell\)</span> and one warping steepness parameter <span class="math inline">\(a\)</span> to <span class="math inline">\(\theta_{\text{GP}}\)</span>.</p></li>
+</ul>
+</div>
+<div id="masking-missing-covariates" class="section level3">
+<h3>Masking missing covariates</h3>
+<p>All kernels that work with continuous covariates are actually also multiplied by a binary mask (BIN) kernel <span class="math inline">\(k_{\text{BIN}}(x,x&#39;)\)</span> which returns <span class="math inline">\(0\)</span> if either <span class="math inline">\(x\)</span> or <span class="math inline">\(x&#39;\)</span> is missing and <span class="math inline">\(1\)</span> if they are both available. Missing data should be encoded as <code>NA</code> or <code>NaN</code> in <code>data</code>.</p>
+</div>
+<div id="heterogeneous-effects-and-covariate-uncertainty" class="section level3">
+<h3>Heterogeneous effects and covariate uncertainty</h3>
+<p>There are also the <code>het()</code> and <code>unc()</code> expressions. They cannot be alone in a term but have to be multiplied by EQ, NS or VM. They are not actually kernels alone but edit the covariate or kernel of their term and add additional parameters. See the tutorials for example use cases and <span class="citation">Timonen et al. (2021)</span> for their mathematical definition.</p>
+</div>
+</div>
+<div id="model-inference" class="section level2">
+<h2>5. Model inference</h2>
+<p>After the model is defined, <code>lgpr</code> uses the MCMC methods of Stan to obtain draws from the joint posterior <span class="math inline">\(p\left(\theta, \textbf{f} \mid \mathcal{D}\right)\)</span> or the marginal posterior of parameters, i.e.  <span class="math inline">\(p\left(\theta \mid \mathcal{D}\right)\)</span>. Which one of these is done is determined by the <code>sample_f</code> argument of <code>lgp()</code> or <code>create_model()</code>.</p>
+<div id="with-sample_f-true" class="section level3">
+<h3>With sample_f = TRUE</h3>
+<p>This option is always possible but not recommended with <code>likelihood = &quot;gaussian&quot;</code>. The joint posterior that is sampled from is <span class="math display">\[\begin{equation}
+p\left(\theta, \textbf{f} \mid \mathcal{D}\right) \propto p\left(\theta, \textbf{f}\right) \cdot p(\textbf{y} \mid \textbf{f}, \theta) \\
+\end{equation}\]</span> and sampling requires evaluating the right-hand side and its gradient thousands of times.</p>
+</div>
+<div id="with-sample_f-false" class="section level3">
+<h3>With sample_f = FALSE</h3>
+<p>This option is only possible (and is automatically selected by default) if <code>likelihood = &quot;gaussian&quot;</code>. This is because <span class="math display">\[\begin{equation}
+p\left(\textbf{y} \mid \theta\right) = \mathcal{N}\left(\textbf{y} \mid \textbf{0}, \textbf{K} + \sigma^2 \textbf{I} \right)
+\end{equation}\]</span> is analytically available only in this case. The distribution that is sampled from is <span class="math display">\[\begin{equation}
+p\left(\theta \mid \mathcal{D}\right) \propto p\left(\theta\right) \cdot p(\textbf{y} \mid \theta) \\
+\end{equation}\]</span> and now sampling requires repeatedly evaluating the right-hand side of this equation and its gradient. This analytical marginalization reduces the MCMC dimension by <span class="math inline">\(N\)</span> and likely improves sampling efficiency. The conditional posterior <span class="math inline">\(p\left(\textbf{f} \mid \theta, \mathcal{D}\right)\)</span> also has an analytical form for a fixed <span class="math inline">\(\theta\)</span>, so draws from the marginal posterior <span class="math inline">\(p\left(\textbf{f} \mid \mathcal{D}\right)\)</span> could be obtained by first drawing <span class="math inline">\(\theta\)</span> and then <span class="math inline">\(\textbf{f}\)</span>, according to the process <span class="math display">\[\begin{align}
+\theta &amp;\sim p\left(\theta \mid \mathcal{D}\right) \\
+\textbf{f} &amp; \sim p\left(\textbf{f} \mid \theta, \mathcal{D}\right).
+\end{align}\]</span> By combining these, we again have draws from the joint posterior <span class="math inline">\(p\left(\theta, \textbf{f} \mid \mathcal{D}\right)\)</span>, but likely with less computational effort.</p>
+</div>
+</div>
+<div id="references" class="section level2 unnumbered">
+<h2 class="unnumbered">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-timonen2021" class="csl-entry">
+Timonen, Juho, Henrik Mannerström, Aki Vehtari, and Harri Lähdesmäki. 2021. <span>“Lgpr: An Interpretable Non-Parametric Method for Inferring Covariate Effects from Longitudinal Data.”</span> <em>Bioinformatics</em> 37 (13): 1860–67. <a href="https://doi.org/10.1093/bioinformatics/btab021">https://doi.org/10.1093/bioinformatics/btab021</a>.
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

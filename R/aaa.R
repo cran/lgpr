@@ -8,7 +8,7 @@
 #' Models are specified using a convenient formula syntax, and can include
 #' shared, group-specific, non-stationary, heterogeneous and temporally
 #' uncertain effects. Bayesian inference for model parameters is performed
-#' using Stan (\code{\link[rstan]{rstan}}). The modeling approach and methods
+#' using 'Stan' (\code{\link[rstan]{rstan}}). The modeling approach and methods
 #' are described in detail in
 #' \href{https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/btab021/6104850}{Timonen et al. (2021)}.
 #'
@@ -41,7 +41,7 @@
 #'  \item \code{\link{plot_data}}: Visualize longitudinal data.
 #' }
 #' @section Data:
-#' The data that you wish to analyze with \code{lgpr} should be in an R
+#' The data that you wish to analyze with 'lgpr' should be in an \R
 #' \code{data.frame} where columns correspond to measured variables and rows
 #' correspond to observations. Some functions that can help working with such
 #' data frames are:
@@ -54,8 +54,11 @@
 #'  \code{\link{adjusted_c_hat}}.
 #' }
 #'
-#' @section Tutorials and case studies:
-#' See \url{https://jtimonen.github.io/lgpr-usage/index.html}.
+#' @section Vignettes and tutorials:
+#' See \url{https://jtimonen.github.io/lgpr-usage/index.html}. The
+#' tutorials focus on code and use cases, whereas the
+#' \href{https://jtimonen.github.io/lgpr-usage/articles/math.html}{Mathematical description of lgpr models}
+#' vignette describes the statistical models and how they can be customized in 'lgpr'.
 #'
 #' @section Citation:
 #' Run \code{citation("lgpr")} to get citation information.
@@ -466,17 +469,31 @@ Prediction <- setClass("Prediction",
 
 #' An S4 class to represent input for kernel matrix computations
 #'
-#' @slot input a list
-#' @slot init a list
-#' @slot param_draws formatted parameter draws
-#' @slot STREAM external pointer (for calling Stan functions)
+#' @slot input Common input (for example parameter values).
+#' @slot K_input Input for computing kernel matrices between data points
+#' (\code{N} x \code{N}). A list.
+#' @slot Ks_input Input for computing kernel matrices between data and output
+#' points (\code{P} x \code{N}). A list.
+#' @slot Kss_input Input for computing kernel matrices between output
+#' points (\code{P} x \code{P}). A list, empty if \code{full_covariance=FALSE}.
+#' @slot comp_names Component names (character vector).
+#' @slot full_covariance Boolean value determining if this can compute
+#' full predictive covariance matrices (or just marginal variance at each point).
+#' @slot no_separate_output_points Boolean value determining if
+#' \code{Ks_input} and \code{Kss_input} are the same thing. Using this
+#' knowledge can reduce unnecessary computations of kernel matrices.
+#' @slot STREAM external pointer (for calling 'Stan' functions)
 #' @param object The object for which to call a class method.
 KernelComputer <- setClass("KernelComputer",
   representation = representation(
     input = "list",
-    init = "list",
-    param_draws = "list",
-    STREAM = "externalptr"
+    K_input = "list",
+    Ks_input = "list",
+    Kss_input = "list",
+    comp_names = "character",
+    full_covariance = "logical",
+    STREAM = "externalptr",
+    no_separate_output_points = "logical"
   )
 )
 

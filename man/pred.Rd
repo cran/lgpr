@@ -12,7 +12,8 @@ pred(
   verbose = TRUE,
   STREAM = get_stream(),
   c_hat_pred = NULL,
-  force = FALSE
+  force = FALSE,
+  debug_kc = FALSE
 )
 }
 \arguments{
@@ -46,6 +47,10 @@ use the same constant.}
 \item{force}{This is by default \code{FALSE} to prevent unintended
 large computations that might crash R or take forever. Set it to \code{TRUE}
 try computing no matter what.}
+
+\item{debug_kc}{If this is \code{TRUE}, this only returns a
+\linkS4class{KernelComputer} object that is created internally. Meant for
+debugging.}
 }
 \value{
 An object of class \linkS4class{GaussianPrediction} or

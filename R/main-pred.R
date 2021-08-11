@@ -45,6 +45,9 @@
 #' @param force This is by default \code{FALSE} to prevent unintended
 #' large computations that might crash R or take forever. Set it to \code{TRUE}
 #' try computing no matter what.
+#' @param debug_kc If this is \code{TRUE}, this only returns a
+#' \linkS4class{KernelComputer} object that is created internally. Meant for
+#' debugging.
 #' @return An object of class \linkS4class{GaussianPrediction} or
 #' \linkS4class{Prediction}.
 #' @family main functions
@@ -55,7 +58,8 @@ pred <- function(fit,
                  verbose = TRUE,
                  STREAM = get_stream(),
                  c_hat_pred = NULL,
-                 force = FALSE) {
+                 force = FALSE,
+                 debug_kc = FALSE) {
   f_sampled <- is_f_sampled(fit)
   if (!is.null(draws)) reduce <- NULL
 
@@ -65,11 +69,16 @@ pred <- function(fit,
     return(out)
   }
 
-  # Otherwise requires kernel computations
+  # Function posterior computations (requires kernel computations)
   fp <- posterior_f(
-    fit = fit, x = x, reduce = reduce, draws = draws,
-    verbose = verbose, STREAM = STREAM, force = force
+    fit, x, reduce, draws, verbose, STREAM,
+    force, debug_kc
   )
+  if (debug_kc) {
+    return(fp)
+  }
+
+  # Predictive computations (requires kernel computations)
   if (f_sampled) {
     out <- pred_extrapolated_draws(fit, fp, c_hat_pred, verbose)
   } else {

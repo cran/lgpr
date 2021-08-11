@@ -1,5 +1,9 @@
 #' Create a model
 #'
+#' @description See the
+#' \href{https://jtimonen.github.io/lgpr-usage/articles/math.html}{Mathematical description of lgpr models}
+#' vignette for more information about the connection between different options
+#' and the created statistical model.
 #' @export
 #' @inheritParams create_model.formula
 #' @inheritParams create_model.prior
@@ -126,7 +130,7 @@ create_model.options <- function(options, verbose) {
 #' @name priors
 #' @aliases normal, log_normal, gam, igam, uniform, student_t, bet
 #' @return a named list
-#' @description These use the same parametrizations as defined in the Stan
+#' @description These use the same parametrizations as defined in the 'Stan'
 #' documentation. See the docs for
 #' \href{https://mc-stan.org/docs/2_24/functions-reference/gamma-distribution.html}{gamma} and
 #' \href{https://mc-stan.org/docs/2_24/functions-reference/inverse-gamma-distribution.html}{inverse gamma} distributions.

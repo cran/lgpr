@@ -2,7 +2,7 @@
 % Please edit documentation in R/main-fit_model.R
 \name{lgp}
 \alias{lgp}
-\title{Main function of the lgpr package}
+\title{Main function of the 'lgpr' package}
 \usage{
 lgp(
   formula,
@@ -108,6 +108,10 @@ Returns an object of the S4 class \linkS4class{lgpfit}.
 \description{
 Creates an additive Gaussian process model using
 \code{\link{create_model}} and fits it using \code{\link{sample_model}}.
+See the
+\href{https://jtimonen.github.io/lgpr-usage/articles/math.html}{Mathematical description of lgpr models}
+vignette for more information about the connection between different options
+and the created statistical model.
 }
 \section{Model formula syntax}{
 

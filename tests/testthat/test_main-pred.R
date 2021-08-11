@@ -53,6 +53,7 @@ test_that("cant accidentally start very large computations", {
   )
 })
 
+
 # -------------------------------------------------------------------------
 
 context("Creating Prediction objects")
