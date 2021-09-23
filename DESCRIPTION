@@ -1,6 +1,6 @@
 Package: lgpr
 Title: Longitudinal Gaussian Process Regression
-Version: 1.1.4
+Version: 1.1.5
 Authors@R: 
     c(person(given = "Juho",
            family = "Timonen",
@@ -35,8 +35,8 @@ URL: https://github.com/jtimonen/lgpr
 BugReports: https://github.com/jtimonen/lgpr/issues
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2021-08-11 01:39:01 UTC; juhotimonen
+Packaged: 2021-09-23 14:21:46 UTC; juhotimonen
 Author: Juho Timonen [aut, cre] (<https://orcid.org/0000-0003-2341-6765>)
 Maintainer: Juho Timonen <juho.timonen@iki.fi>
 Repository: CRAN
-Date/Publication: 2021-08-11 05:00:01 UTC
+Date/Publication: 2021-09-23 15:00:02 UTC

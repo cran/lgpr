@@ -1,7 +1,7 @@
-ee42cda19d3d3254fd7f420ecbaa6dc6 *DESCRIPTION
-8d86f48e841fc565efeead5c1f848b84 *NAMESPACE
+70f0e4c4a3d9076824c9799f49afced7 *DESCRIPTION
+c97745d9e703573b7a7b36633ab0fc0f *NAMESPACE
 4154d23132b79bb187f106162b7c7855 *R/RcppExports.R
-dab60822f699df534d6e5a51b5ba7e61 *R/aaa.R
+ea9592fff59863ab0a14626bfb6d1f03 *R/aaa.R
 d05257c46d8e5e50036e9f3bfd5ae0d8 *R/main-create_model.R
 8352d14576eeb3df067658f36dbd9564 *R/main-datautil.R
 a5d11fa018021fab8162b0bb89afdaab *R/main-draw_pred.R
@@ -34,7 +34,7 @@ afe3eb468c1c59bd9f9d301975c4f955 *R/utils-kernel_reference.R
 af0f2896fc3c4276c59351faaefa27e8 *R/utils-plot.R
 2412c12811c30b06de9647f8b48d6a55 *R/utils-pred.R
 57bde2cb2b18c16f893f80d42c969a92 *R/zzz.R
-fe20ed5ace38e5135de9fa633e8d8757 *README.md
+e7ed7c342793956a0826fea47d222430 *README.md
 1d12a65f8627a814d8f9946bd647ede5 *build/vignette.rds
 1cc60bdd8610449d30184e0bb374bf46 *configure
 6bea7bdbd44ffa386677bfdec2d1984b *configure.win
@@ -43,7 +43,7 @@ b7b4c63571cb046012c0895077f84280 *data/testdata_001.rda
 c551148459368ccd6214aa5909fd7c4f *inst/CITATION
 1b62df5e63ca0721e8751049d8e36df4 *inst/doc/math.R
 c56480cb4f735aad4bab79de3e810d9f *inst/doc/math.Rmd
-dbbec1b4aac388610d8a2285cc08383e *inst/doc/math.html
+717bbbf700eaef1da95facea3d3350e3 *inst/doc/math.html
 855c064dbf8deaff96c8dc8a87169109 *inst/include/stan_meta_header.hpp
 5d5d3c17e32e75f4b579019d42d2cda0 *inst/stan/_common/data-covariates.stan
 124cbc39908d2ee2c666b4957f7b8a4d *inst/stan/_common/data-general.stan
