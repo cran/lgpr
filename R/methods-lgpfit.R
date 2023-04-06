@@ -14,11 +14,17 @@ setMethod("component_names", "lgpfit", function(object) {
 })
 
 #' @export
+#' @describeIn lgpfit Get number of model components. Returns a
+#' positive integer.
+setMethod("num_components", "lgpfit", function(object) {
+  length(component_names(object))
+})
+
+#' @export
 #' @describeIn lgpfit Apply postprocessing. Returns an updated
 #' \linkS4class{lgpfit} object (copies data).
 #' @param verbose Can the method print any messages?
 setMethod("postproc", "lgpfit", function(object, verbose = TRUE) {
-
   # Compute pred that can be used to compute relevances
   if (contains_postproc(object)) {
     msg <- paste0(

@@ -34,6 +34,14 @@ setMethod("component_info", "lgpmodel", function(object) {
 })
 
 #' @export
+#' @describeIn lgpmodel Get number of model components. Returns a
+#' positive integer.
+setMethod("num_components", "lgpmodel", function(object) {
+  length(component_names(object))
+})
+
+
+#' @export
 #' @describeIn lgpmodel Get covariate information.
 setMethod("covariate_info", "lgpmodel", function(object) {
   info1 <- covariate_info.cont(object)
@@ -271,7 +279,6 @@ get_num_trials <- function(object) {
 #' @param group_by grouping variable name (use \code{NULL} for no grouping)
 #' @return a data frame
 create_plot_df <- function(object, x = "age", group_by = "id") {
-
   # Get x-axis variable
   dat <- get_data(object)
   x_name <- x

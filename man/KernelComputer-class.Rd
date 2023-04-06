@@ -29,17 +29,17 @@ An S4 class to represent input for kernel matrix computations
 }
 \section{Methods (by generic)}{
 \itemize{
-\item \code{show}: Print a summary about the object.
+\item \code{show(KernelComputer)}: Print a summary about the object.
 
-\item \code{num_components}: Get number of components.
+\item \code{num_components(KernelComputer)}: Get number of components.
 
-\item \code{num_evalpoints}: Get number of evaluation points.
+\item \code{num_evalpoints(KernelComputer)}: Get number of evaluation points.
 
-\item \code{num_paramsets}: Get number of parameter sets.
+\item \code{num_paramsets(KernelComputer)}: Get number of parameter sets.
 
-\item \code{component_names}: Get component names.
+\item \code{component_names(KernelComputer)}: Get component names.
+
 }}
-
 \section{Slots}{
 
 \describe{
@@ -57,7 +57,8 @@ points (\code{P} x \code{P}). A list, empty if \code{full_covariance=FALSE}.}
 \item{\code{comp_names}}{Component names (character vector).}
 
 \item{\code{full_covariance}}{Boolean value determining if this can compute
-full predictive covariance matrices (or just marginal variance at each point).}
+full predictive covariance matrices (or just marginal variance at
+each point).}
 
 \item{\code{no_separate_output_points}}{Boolean value determining if
 \code{Ks_input} and \code{Kss_input} are the same thing. Using this
